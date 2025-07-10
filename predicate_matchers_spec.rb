@@ -50,7 +50,7 @@ RSpec.describe 'Predicate matchers' do
     expect('Hello').not_to be_empty
     # be_present checks if the object is not nil or empty
     # 
-    be_present = RSpec::Matchers.define :be_present do
+    RSpec::Matchers.define :be_present do
       match do |actual|
         !actual.nil? && !actual.empty?
       end
