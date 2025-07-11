@@ -1,42 +1,17 @@
-class Jeep 
-  attr_accessor :color, :mileage, :model, :year , :age
-  def initialize(color, mileage, model, year)
-    @color = color
-    @mileage = mileage
-    @model = model
-    @year = year
-    # calculate age based on the current year
-    current_year = Time.now.year
-    @age = current_year - year
-    puts "Your #{@color} Jeep #{@model} is #{@age} years old at #{@mileage} miles, manufactured in #{@year}."
-  end
-
-  def repaint(new_color)
-    puts "Repainting Jeep from #{@color} to #{new_color}."
-    # change the color of the Jeep
-    puts "Your Jeep is now #{new_color}."
-    @color = new_color
-  end
-
-  def drive(miles)
-    puts "Driving #{@model} for #{miles} miles."
-    @mileage += miles
-    puts "Your Jeep now has #{@mileage} miles."
-  end
-
-  def hold_for_n_years(n_years)
-    puts "Holding Jeep for #{n_years} years."
-    @age += n_years
-    puts "Your Jeep is now #{@age} years old."
-  end
- 
-end
+require_relative File.expand_path('../classes/vehicle.rb', __dir__)
 
 # change matcher: allows you to test state changes in an object or variable
 RSpec.describe 'Change Matcher' do
   let(:nums) { [1, 2, 3] }
   let(:hash) { { a: 1, b: 2 } }
-  let(:jeep) { Jeep.new('blue', 189000, 'Wrangler', 1999) }
+  let(:jeep) { Jeep.new(
+    color: 'blue',
+    mileage: 189000,
+    make: 'Jeep',
+    model: 'Wrangler',
+    year: 1999,
+    safe: false
+  ) }
   
   it 'tests if the size of an array changes' do
     expect { nums << 4 }.to change { nums.size }.by(1)

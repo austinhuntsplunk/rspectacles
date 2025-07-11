@@ -1,3 +1,15 @@
+def my_horrid_method(arg1, arg2) 
+  arg1 / arg2 
+end 
+
+
+class CustomError < StandardError; end
+
+def another_method
+  raise CustomError, 'This is a custom error message'
+end
+
+
 RSpec.describe 'raise_error matcher' do 
   describe 'raising errors' do 
     it 'raises a specific error' do 
@@ -24,10 +36,15 @@ RSpec.describe 'raise_error matcher' do
       expect { 1 / 0 }.to raise_error(ZeroDivisionError)
     end 
 
-    it 'raises a custom error' do
-      class CustomError < StandardError; end
-      expect { raise CustomError, 'This is a custom error' }.to raise_error(CustomError, 'This is a custom error')
+    it 'raises a custom error' do 
+      expect { raise CustomError, 'This is a custom error message' }.to raise_error(CustomError, 'This is a custom error message')
     end
- 
+    
+    it 'raises an error when a horrid method is called' do
+      expect { my_horrid_method(nil, 2) }.to raise_error(NoMethodError, "undefined method `/' for nil:NilClass")
+      expect { my_horrid_method(1, 0) }.to raise_error(ZeroDivisionError)
+      expect { my_horrid_method(1, 2) }.not_to raise_error
+      expect { my_horrid_method(1, 'a') }.to raise_error(TypeError, "String can't be coerced into Integer")
+    end 
   end
 end
