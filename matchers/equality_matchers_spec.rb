@@ -7,8 +7,8 @@ RSpec.describe 'Equality Matchers (eq, eql, equal)' do
 
   let(:integer) { 5 }
   let(:float) { 5.0 }
-   let(:integer2) { 5 }
-      let(:float2) { 5.0 }
+  let(:integer2) { 5 }
+  let(:float2) { 5.0 }
   let(:string) { 'Hello' }
   let(:array) { [1, 2, 3] }
   let(:array2) { [1, 2, 3] } # Another array with same content
@@ -16,7 +16,7 @@ RSpec.describe 'Equality Matchers (eq, eql, equal)' do
   let(:hash) { { key: 'value' } }
 
   describe 'eq matcher' do
-    it 'checks value equality and ignores type' do 
+    it 'checks value equality and ignores type' do
       expect(integer).to eq(float)
       expect(integer).not_to eq('5') # Strings not equal to integers
       expect(array).to eq([1, 2, 3]) # Arrays with same
@@ -27,7 +27,7 @@ RSpec.describe 'Equality Matchers (eq, eql, equal)' do
     end
   end
 
-  describe 'eql matcher' do 
+  describe 'eql matcher' do
     it 'tests for value equality and type' do
       expect(integer).to eql(5)
       expect(float).not_to eql(integer) # This will fail because float is not an integer
@@ -58,7 +58,7 @@ RSpec.describe 'Equality Matchers (eq, eql, equal)' do
     end
   end
 
-  describe 'be matcher (shorthand for equal)' do 
+  describe 'be matcher (shorthand for equal)' do
     it 'checks object identity' do
       expect(integer).to be(integer2) # because integer2 is the same object as integer
       expect(float).to be(float2) # because float2 is the same object as float
@@ -67,7 +67,7 @@ RSpec.describe 'Equality Matchers (eq, eql, equal)' do
       expect(array).to be(array) # because array is the same object as itself
       expect(array).to be(array3) # because array3 is the same object as array
       expect(hash).not_to be({ key: 'value' }) # because hash is not the same object as { key: 'value' }
-      expect(string).not_to be('Hello') # because string is not the same object as 'Hello'  
+      expect(string).not_to be('Hello') # because string is not the same object as 'Hello'
     end
   end
 end

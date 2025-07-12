@@ -1,7 +1,8 @@
+
+
 # Get absolute path to vehicle.rb in ../classes/vehicle.rb
 # do not use ../
 require_relative File.expand_path('../classes/vehicle.rb', __dir__)
-
 
 [Truck, Motorcycle, Jeep].each do |vehicle_class|
   RSpec.describe vehicle_class do
@@ -14,7 +15,7 @@ require_relative File.expand_path('../classes/vehicle.rb', __dir__)
       expect(vehicle).to respond_to(:drive)
     end
 
-    it 'responds to the hold_for_n_years method' do 
+    it 'responds to the hold_for_n_years method' do
       expect(vehicle).to respond_to(:hold_for_n_years)
     end
 
@@ -23,7 +24,7 @@ require_relative File.expand_path('../classes/vehicle.rb', __dir__)
     end
 
     it 'responds to stop_engine method' do
-        expect(vehicle).to respond_to(:stop_engine)
+      expect(vehicle).to respond_to(:stop_engine)
     end
 
     it { is_expected.to respond_to(:color) }
@@ -31,7 +32,7 @@ require_relative File.expand_path('../classes/vehicle.rb', __dir__)
     it { is_expected.to respond_to(:make) }
     it { is_expected.to respond_to(:model) }
     it { is_expected.to respond_to(:year) }
-    it { is_expected.to respond_to(:age) }  
+    it { is_expected.to respond_to(:age) }
     it { is_expected.to respond_to(:safe) }
   end
 end

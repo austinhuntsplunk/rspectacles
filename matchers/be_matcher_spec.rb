@@ -1,5 +1,7 @@
+
+
 # Checking Truthy/Falsy/Nil values in Ruby
-# 
+#
 # Easy to remember:
 # - Truthy: Everything except false and nil.
 # - Falsy: Only false and nil.
@@ -33,19 +35,19 @@ RSpec.describe 'Be Matchers' do
     expect(false).to be_falsy
     expect(nil).to be_falsy
 
-    expect(0 > 1).to be_falsy # This will pass because 0 > 1 is false
-    expect([] == nil).to be_falsy # This will pass because an empty array is not equal to nil
-    expect({} == nil).to be_falsy # This will pass because an empty hash is not equal to nil
+    expect(1.negative?).to be_falsy # This will pass because 0 > 1 is false
+    expect([].nil?).to be_falsy # This will pass because an empty array is not equal to nil
+    expect({}.nil?).to be_falsy # This will pass because an empty hash is not equal to nil
   end
 
   it 'checks if empty arrays and hashes are truthy' do
     expect([]).to be_truthy
     expect({}).to be_truthy
-    puts "Empty arrays and hashes are truthy in Ruby, even though they are empty."
+    puts 'Empty arrays and hashes are truthy in Ruby, even though they are empty.'
   end
 
   it 'checks if a value is nil' do
-    expect(nil).to be_nil # the only value that is nil in Ruby 
+    expect(nil).to be_nil # the only value that is nil in Ruby
     expect(false).not_to be_nil
     expect(0).not_to be_nil
     my_hash = { key: 'value' }

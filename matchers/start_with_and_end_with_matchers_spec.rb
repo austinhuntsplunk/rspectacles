@@ -1,4 +1,6 @@
-RSpec.describe 'start_with and end_with matchers' do 
+
+
+RSpec.describe 'start_with and end_with matchers' do
   describe 'start_with matcher' do
     it 'checks if a string starts with a specific substring' do
       expect('hot chocolate').to start_with('hot')
@@ -6,10 +8,10 @@ RSpec.describe 'start_with and end_with matchers' do
     end
     describe 'hot chocolate' do
       it { is_expected.to start_with('hot') }
-    end 
+    end
 
-    describe [:a, :b, :c, :d] do 
-      it { is_expected.to start_with(:a) } 
+    describe [:a, :b, :c, :d] do
+      it { is_expected.to start_with(:a) }
       it { is_expected.to start_with(:a, :b) }
     end
   end
@@ -21,13 +23,13 @@ RSpec.describe 'start_with and end_with matchers' do
     end
     describe 'hot chocolate' do
       it { is_expected.to end_with('chocolate') }
-    end 
+    end
 
-    describe [:a, :b, :c, :d] do 
-      it { is_expected.to end_with(:d) } 
+    describe [:a, :b, :c, :d] do
+      it { is_expected.to end_with(:d) }
       it { is_expected.to end_with(:c, :d) }
     end
   end
 
-  describe 
+  describe
 end

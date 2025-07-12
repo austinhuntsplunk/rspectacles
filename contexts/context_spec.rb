@@ -1,4 +1,6 @@
-RSpec.describe '#even? method' do 
+
+
+RSpec.describe '#even? method' do
   it 'returns true for even numbers' do
     expect(2.even?).to be true
     expect(4.even?).to be true
@@ -18,9 +20,8 @@ RSpec.describe '#even? method' do
     expect { [1, 2].even? }.to raise_error(NoMethodError)
   end
 
-    
-  # BETTER APPROACH: Nest block in another describe block 
-  # to avoid if and when etc. in your descriptions 
+  # BETTER APPROACH: Nest block in another describe block
+  # to avoid if and when etc. in your descriptions
   describe 'with even numbers' do
     it 'returns true' do
       expect(2.even?).to be true
@@ -51,4 +52,3 @@ RSpec.describe '#even? method' do
     end
   end
 end
- 

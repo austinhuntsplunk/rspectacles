@@ -1,14 +1,14 @@
 
+
 # All of the referenced classes below (String, Array, Hash, SausageLength) have a length method. That should return an integer between 1 and 15
 RSpec.shared_examples 'lengthable' do
-  it 'has a length that is an integer' do 
+  it 'has a length that is an integer' do
     expect(subject.length).to be_a(Integer)
   end
   it 'has a length between 1 and 15' do
     expect(subject.length).to be_between(1, 15)
   end
 end
-
 
 RSpec.describe String do
   # The default subject for String is an empty string, but we can override it.
@@ -19,7 +19,7 @@ RSpec.describe String do
   end
 end
 
-RSpec.describe Array do 
+RSpec.describe Array do
   subject { [1, 2, 3] }
   include_examples 'lengthable'
 end
@@ -43,9 +43,8 @@ RSpec.describe Hash do
   include_examples 'lengthable'
 end
 
-
-class SausageLink 
-  def length 
+class SausageLink
+  def length
     # random integer between 1 and 10
     rand(1..10)
   end
@@ -55,4 +54,3 @@ RSpec.describe SausageLink do
   subject { described_class.new }
   include_examples 'lengthable'
 end
- 

@@ -1,5 +1,8 @@
-class ProfessionalWrestler 
-  attr_reader :name, :finishing_move 
+
+
+class ProfessionalWrestler
+  attr_reader :name, :finishing_move
+
   def initialize(name, finishing_move)
     @name = name
     @finishing_move = finishing_move
@@ -17,7 +20,7 @@ RSpec.describe 'have_attributes matcher' do
     expect(wrestler).not_to have_attributes(name: 'The Rock', finishing_move: 'Rock Bottom')
   end
 
-  # could also use it as the subject 
+  # could also use it as the subject
   describe ProfessionalWrestler.new('The Undertaker', 'Tombstone Piledriver') do
     it 'has the correct name and finishing move' do
       expect(subject).to have_attributes(name: 'The Undertaker', finishing_move: 'Tombstone Piledriver')

@@ -22,14 +22,13 @@ RSpec.describe 'Predicate matchers' do
   it 'checks if a number is odd' do
     expect(3.odd?).to be true
     expect(4.odd?).to be false
-    expect(3).to be_odd 
+    expect(3).to be_odd
     expect(3).not_to be_even # This will pass because 3 is odd
   end
 
-  describe 'using predicate to check calculation results' do 
-    
-    it 'can be tested with ruby methods' do 
-      result = 16 / 2 
+  describe 'using predicate to check calculation results' do
+    it 'can be tested with ruby methods' do
+      result = 16 / 2
       expect(result).to be_even # This will pass because 16 / 2 = 8, which is even
       expect(result).not_to be_odd # This will pass because 8 is not odd
     end
@@ -45,11 +44,11 @@ RSpec.describe 'Predicate matchers' do
     expect(''.empty?).to be true
     expect('Hello'.empty?).to be false
     # same as a length check
-    expect('Hello'.length).to be > 0
+    expect('Hello'.length).to be_positive
 
     expect('Hello').not_to be_empty
     # be_present checks if the object is not nil or empty
-    # 
+    #
     RSpec::Matchers.define :be_present do
       match do |actual|
         !actual.nil? && !actual.empty?
@@ -66,7 +65,7 @@ RSpec.describe 'Predicate matchers' do
     expect('Hello').to be_present
   end
 
-  describe 0 do 
-    it { is_expected.to be_zero } 
+  describe 0 do
+    it { is_expected.to be_zero }
   end
 end

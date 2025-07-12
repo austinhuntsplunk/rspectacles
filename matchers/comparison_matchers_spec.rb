@@ -1,5 +1,7 @@
-RSpec.describe 'Comparison Matchers' do 
-  it 'allows for comparison with built-in Ruby matchers' do 
+
+
+RSpec.describe 'Comparison Matchers' do
+  it 'allows for comparison with built-in Ruby matchers' do
     expect(5).to be > 3
     expect(10).to be >= 10
     expect(11).to be >= 10
@@ -18,7 +20,7 @@ RSpec.describe 'Comparison Matchers' do
   end
 
   describe 100 do
-    before(:example) do 
+    before(:example) do
       puts "The subject of this block is the number #{subject}."
       puts 'It will be used to demonstrate comparison matchers.'
     end

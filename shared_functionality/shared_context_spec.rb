@@ -1,5 +1,7 @@
+
+
 RSpec.shared_context 'Common Context' do
-  before do 
+  before do
     @main = []
     @dessert = []
     @drinks = []
@@ -9,28 +11,30 @@ RSpec.shared_context 'Common Context' do
     @main << food
     puts "Cooking #{food}..."
   end
+
   def prepare_drink(drink)
     @drinks << drink
     puts "Preparing #{drink}..."
   end
+
   def creating_dessert(dessert)
     @dessert << dessert
     puts "Creating dessert: #{dessert}..."
   end
 
-  let (:dinner) do 
+  let(:dinner) do
     {
       main: @main,
       dessert: @dessert,
       drinks: @drinks
     }
   end
-end 
+end
 
 RSpec.describe 'Italian Dinner' do
   include_context 'Common Context'
-  
-  before do 
+
+  before do
     cook('Pasta')
     prepare_drink('Wine')
     creating_dessert('Tiramisu')
