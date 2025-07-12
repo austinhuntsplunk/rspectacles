@@ -1,3 +1,6 @@
+# When to use class doubles: you're testing a class that uses another class's CLASS methods.
+# When to use instance doubles: you're testing a class that uses another class's INSTANCE methods.
+    
 class Person 
     def initialize(name, age)
         @name = name

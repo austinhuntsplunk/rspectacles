@@ -1,6 +1,6 @@
 # Polymorphism - we want to test that an object responds to a method, where the object may be of different types
 class Vehicle
-    attr_accessor :color, :mileage, :make, :model, :year, :age, :safe
+    attr_accessor :color, :mileage, :make, :model, :year, :age, :safe, :describe
     def safe?
         @safe
     end
@@ -13,37 +13,52 @@ class Vehicle
         puts "Stopping the engine"
     end
 
-  def initialize(color:, mileage:, make:, model:, year:, safe: true)
-    @color = color
-    @mileage = mileage
-    @make = make    
-    @model = model
-    @year = year
-    @safe = safe
-    # calculate age based on the current year
-    current_year = Time.now.year
-    @age = current_year - year
-    puts "Your #{@color} Jeep #{@model} is #{@age} years old at #{@mileage} miles, manufactured in #{@year}."
-  end
+    def describe 
+        # return hash of vehicle attributes
+        {
+            color: @color,
+            mileage: @mileage,
+            make: @make,           
+            model: @model,
+            year: @year,
+            age: @age,
+            safe: @safe
+        }
+    end
 
-  def repaint(new_color)
-    puts "Repainting #{@make} #{@model} from #{@color} to #{new_color}."
-    # change the color of the Jeep
-    puts "Your Jeep is now #{new_color}."
-    @color = new_color
-  end
+    def initialize(color: 'black', mileage: 0, make: 'Toyota', model: 'Tacoma', year: '2021', safe: true)
+        @color = color
+        @mileage = mileage
+        @make = make    
+        @model = model
+        @year = year
+        @safe = safe
+        # calculate age based on the current year
+        current_year = Time.now.year
+        @age = current_year - year
+        puts "Your #{@color} Jeep #{@model} is #{@age} years old at #{@mileage} miles, manufactured in #{@year}."
+    end  
 
-  def drive(miles)
-    puts "Driving #{@make} #{@model} for #{miles} miles."
-    @mileage += miles
-    puts "Your Jeep now has #{@mileage} miles."
-  end
+    # instance methods for Vehicle class
 
-  def hold_for_n_years(n_years)
-    puts "Holding #{@make} #{@model} for #{n_years} years."
-    @age += n_years
-    puts "Your #{@make} #{@model} is now #{@age} years old."
-  end
+    def repaint(new_color)
+        puts "Repainting #{@make} #{@model} from #{@color} to #{new_color}."
+        # change the color of the Jeep
+        puts "Your Jeep is now #{new_color}."
+        @color = new_color
+    end
+
+    def drive(miles)
+        puts "Driving #{@make} #{@model} for #{miles} miles."
+        @mileage += miles
+        puts "Your Jeep now has #{@mileage} miles."
+    end
+
+    def hold_for_n_years(n_years)
+        puts "Holding #{@make} #{@model} for #{n_years} years."
+        @age += n_years
+        puts "Your #{@make} #{@model} is now #{@age} years old."
+    end
 end
 
 class Truck < Vehicle
