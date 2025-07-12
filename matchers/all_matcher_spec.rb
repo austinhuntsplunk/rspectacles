@@ -8,6 +8,7 @@ RSpec.describe 'All Matchers' do
       expect(number).to be_a(Integer)
     end
 
+    
     # better way to write the above using aggregate checks
     expect([1, 2, 3]).to all(be_between(1, 3))
     expect([1, 2, 3]).to all(be_a(Integer))
