@@ -1,42 +1,71 @@
 # Classes and Object-Oriented Testing
 
-This folder contains examples of testing object-oriented Ruby code, including class behavior, polymorphism, and object interactions.
+This folder contains examples of testing object-oriented Ruby code, including class behavior, polymorphism, object interactions, and real-world class design patterns.
 
 ## Overview
 
 Object-oriented testing in RSpec focuses on:
-- Testing class behavior and state
-- Verifying object interactions
+- Testing class behavior and state management
+- Verifying object interactions and collaborations
 - Testing inheritance and polymorphism
-- Ensuring proper encapsulation
+- Ensuring proper encapsulation and interfaces
+- Testing complex object relationships
 
 ## Files and Concepts
 
 ### `vehicle.rb`
-A comprehensive example of object-oriented Ruby demonstrating:
+A comprehensive example of inheritance and polymorphism with multiple vehicle types.
 
 **Object-Oriented Concepts:**
 - **Base class (`Vehicle`)** - Common behavior and attributes
 - **Inheritance** - `Truck`, `Motorcycle`, `Jeep` inherit from `Vehicle`
-- **Polymorphism** - All vehicles respond to common methods
+- **Polymorphism** - All vehicles respond to common methods (`start_engine`, `stop_engine`)
 - **Encapsulation** - Private state with public interfaces
 - **Keyword arguments** - Modern Ruby initialization patterns
+- **Factory methods** - Multiple ways to create instances
+- **Age calculation** - Dynamic attribute computation
 
 **Key Features:**
 - `attr_accessor` for property access
 - Custom predicate method (`safe?`)
 - Instance variable management
-- Age calculation based on current year
-- Polymorphic method signatures
+- Class factory methods (`Vehicle.default`, `Vehicle.sports_car`)
+- Polymorphic method signatures across subclasses
+
+### `garage.rb`
+Demonstrates object collaboration and flexible method design.
+
+**Key Concepts:**
+- **Object collaboration** - Garage manages Vehicle instances
+- **Flexible method signatures** - `park` method accepts various inputs
+- **Duck typing** - Uses `respond_to?` instead of strict type checking
+- **Collection management** - Managing arrays of objects
+- **Method overloading simulation** - Single method handling multiple use cases
+
+**Features:**
+- Parks existing vehicle instances
+- Creates and parks vehicles from classes
+- Retrieves vehicles from storage
+- Compatible with test doubles and real objects
+
+### `card_game.rb`
+Complete card game implementation showing complex object interactions.
+
+**Object-Oriented Patterns:**
+- **Player class** - Manages player state and hand
+- **Deck class** - Card collection with shuffling and dealing
+- **Game logic** - Orchestrates player and deck interactions
+- **Class methods** - Factory methods for deck creation
+- **State management** - Tracking game state across turns
 
 ### `card_spec.rb`
-Tests for a Card class demonstrating:
+Comprehensive test suite for the card game classes.
 
 **Testing Patterns:**
-- Object initialization
-- Attribute access and modification
-- Method behavior verification
-- State change testing
+- **Class behavior testing** - Verifying method functionality
+- **State change testing** - Using `change` matcher
+- **Object interaction testing** - Verifying collaborations
+- **Edge case testing** - Boundary conditions and error states
 
 ## Key Testing Concepts
 
@@ -60,7 +89,7 @@ describe Truck do
   
   it 'has truck-specific attributes' do
     truck = Truck.new(cargo_capacity: 1000)
-    expect(truck).to respond_to(:cargo_capacity)
+    expect(truck.instance_variable_get(:@cargo_capacity)).to eq(1000)
   end
 end
 ```
@@ -73,8 +102,88 @@ end
     
     it { is_expected.to respond_to(:start_engine) }
     it { is_expected.to respond_to(:stop_engine) }
+    it { is_expected.to be_a(Vehicle) }
   end
 end
+```
+
+### Testing Object Collaborations
+```ruby
+describe Garage do
+  let(:vehicle) { Vehicle.new(color: 'blue') }
+  
+  it 'stores parked vehicles' do
+    garage = Garage.new
+    garage.park(vehicle)
+    expect(garage.vehicles).to include(vehicle)
+  end
+end
+```
+
+## Advanced OOP Testing Patterns
+
+### Testing Factory Methods
+```ruby
+describe 'Vehicle factory methods' do
+  describe '.default' do
+    subject { Vehicle.default }
+    
+    it { expect(subject.make).to eq('Toyota') }
+    it { expect(subject.model).to eq('Corolla') }
+  end
+
+  describe '.sports_car' do
+    subject { Vehicle.sports_car }
+    
+    it { expect(subject.make).to eq('Ferrari') }
+    it { expect(subject.color).to eq('red') }
+  end
+end
+```
+
+### Testing State Changes
+```ruby
+describe '#drive' do
+  let(:vehicle) { Vehicle.new(mileage: 1000) }
+  
+  it 'increases mileage' do
+    expect { vehicle.drive(100) }.to change(vehicle, :mileage).by(100)
+  end
+  
+  it 'updates age when holding for years' do
+    expect { vehicle.hold_for_n_years(2) }.to change(vehicle, :age).by(2)
+  end
+end
+```
+
+### Testing Duck Typing
+```ruby
+describe Garage do
+  context 'with duck-typed objects' do
+    let(:vehicle_like) { double('Vehicle', color: 'red', make: 'Honda') }
+    
+    it 'accepts objects that respond to vehicle methods' do
+      garage = Garage.new
+      result = garage.park(vehicle_like)
+      expect(garage.vehicles).to include(vehicle_like)
+    end
+  end
+end
+```
+
+## Running Tests
+
+```bash
+# Run all class tests
+rspec classes/
+
+# Run specific class tests
+rspec classes/card_spec.rb
+rspec classes/vehicle.rb  # Contains embedded RSpec tests
+
+# Test specific patterns
+rspec classes/ -e "polymorphism"
+rspec classes/ -e "inheritance"
 ```
 
 ## Object-Oriented Testing Principles
@@ -105,54 +214,60 @@ end
 # Avoid testing private methods directly
 ```
 
-### 3. Test State Changes
+### 3. Test Object Collaborations
 ```ruby
-describe '#drive' do
-  it 'increases mileage' do
-    vehicle = Vehicle.new(mileage: 1000)
-    expect { vehicle.drive(100) }.to change(vehicle, :mileage).by(100)
+describe 'object interactions' do
+  it 'coordinates between objects' do
+    garage = Garage.new
+    vehicle = Vehicle.new
+    
+    garage.park(vehicle)
+    retrieved = garage.retrieve(vehicle)
+    
+    expect(retrieved).to eq(vehicle)
+    expect(garage.vehicles).not_to include(vehicle)
   end
 end
 ```
 
 ## Common Patterns
 
-### Testing Initialization
+### Testing Initialization Flexibility
 ```ruby
-describe '#initialize' do
-  context 'with valid parameters' do
-    subject { Vehicle.new(color: 'blue', mileage: 0, make: 'Honda', model: 'Civic', year: 2021) }
+describe Vehicle do
+  context 'with default parameters' do
+    subject { Vehicle.new }
     
-    it { expect(subject.color).to eq('blue') }
-    it { expect(subject.mileage).to eq(0) }
-    it { expect(subject.make).to eq('Honda') }
+    it { expect(subject.make).to eq('Toyota') }
+    it { expect(subject.color).to eq('black') }
   end
   
-  context 'with invalid parameters' do
-    it 'raises an error when missing required params' do
-      expect { Vehicle.new }.to raise_error(ArgumentError)
-    end
+  context 'with custom parameters' do
+    subject { Vehicle.new(color: 'red', make: 'Honda') }
+    
+    it { expect(subject.color).to eq('red') }
+    it { expect(subject.make).to eq('Honda') }
   end
 end
 ```
 
 ### Testing Attribute Accessors
 ```ruby
-describe 'attribute accessors' do
-  subject { Vehicle.new(color: 'red', mileage: 0, make: 'Toyota', model: 'Camry', year: 2020) }
+describe 'attribute management' do
+  subject { Vehicle.new(color: 'red') }
   
-  it 'allows reading color' do
+  it 'allows reading attributes' do
     expect(subject.color).to eq('red')
   end
   
-  it 'allows setting color' do
+  it 'allows modifying attributes' do
     subject.color = 'blue'
     expect(subject.color).to eq('blue')
   end
 end
 ```
 
-### Testing Predicates
+### Testing Predicates and State
 ```ruby
 describe '#safe?' do
   context 'when vehicle is safe' do
@@ -167,73 +282,37 @@ describe '#safe?' do
 end
 ```
 
-## Running Tests
-
-```bash
-# Run all class tests
-rspec classes/
-
-# Run specific class tests
-rspec classes/card_spec.rb
-
-# Test just the Vehicle class behavior
-rspec -e "Vehicle"
-```
-
-## Advanced OOP Testing
-
-### Testing Class Methods
-```ruby
-describe '.class_method' do
-  it 'returns expected value' do
-    expect(Vehicle.total_count).to eq(0)
-  end
-end
-```
-
-### Testing Modules and Mixins
-```ruby
-module Drivable
-  def drive
-    # implementation
-  end
-end
-
-describe Vehicle do
-  it 'includes Drivable module' do
-    expect(Vehicle.included_modules).to include(Drivable)
-  end
-end
-```
-
-### Testing Callbacks and Observers
-```ruby
-describe 'callbacks' do
-  it 'calls update_mileage after drive' do
-    expect(vehicle).to receive(:update_mileage)
-    vehicle.drive(100)
-  end
-end
-```
-
-## Best Practices
-
-1. **Test one behavior per test** - Keep tests focused
-2. **Use descriptive context blocks** - Group related tests
-3. **Test edge cases** - Boundary conditions and error states
-4. **Mock external dependencies** - Keep tests isolated
-5. **Test the interface, not internals** - Focus on public behavior
-
-## Integration with Other RSpec Features
+## Integration with RSpec Features
 
 - **Shared examples** - Test common behavior across classes
 - **Custom matchers** - Create domain-specific assertions
 - **Hooks** - Set up complex object graphs
 - **Let declarations** - Create test data and collaborators
+- **Instance doubles** - Mock object collaborations
+
+## Best Practices
+
+1. **Test one behavior per test** - Keep tests focused and clear
+2. **Use descriptive context blocks** - Group related test scenarios
+3. **Test edge cases** - Boundary conditions and error states
+4. **Mock external dependencies** - Keep tests isolated and fast
+5. **Test the interface, not internals** - Focus on public behavior
+6. **Use factory methods** - Create consistent test objects
+7. **Test object collaborations** - Verify how objects work together
+
+## Real-World Applications
+
+The classes in this folder demonstrate common real-world patterns:
+- **Domain modeling** - Vehicle hierarchy represents real-world concepts
+- **Service objects** - Garage manages and coordinates vehicles
+- **Game logic** - Card game shows complex state management
+- **Flexible APIs** - Methods that accept various input types
+- **Factory patterns** - Multiple ways to create objects
 
 ## Next Steps
 
-- Explore testing object collaborations and dependencies
-- Learn about mocking and stubbing for isolated unit tests
-- Practice testing more complex inheritance hierarchies
-- Study testing design patterns like Factory and Builder
+- Explore more complex inheritance hierarchies
+- Learn about composition vs. inheritance trade-offs
+- Practice testing observer patterns and callbacks
+- Study testing strategies for domain-driven design
+- Implement and test design patterns (Strategy, Factory, Observer)
